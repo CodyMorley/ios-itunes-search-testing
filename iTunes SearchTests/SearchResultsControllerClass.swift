@@ -10,6 +10,7 @@ import XCTest
 @testable import iTunes_Search
 
 class SearchResultsControllerClass: XCTestCase {
+    
     func testForSomeResults() {
         let controller = SearchResultController()
         
@@ -21,4 +22,5 @@ class SearchResultsControllerClass: XCTestCase {
         wait(for: [e], timeout: 2)
         XCTAssertTrue(controller.searchResults.count > 0, "Expecting at least one result for Garageband.")
     }
+    
 }
