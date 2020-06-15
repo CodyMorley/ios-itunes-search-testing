@@ -16,7 +16,7 @@ class SearchResultsControllerTests: XCTestCase {
         
         let e = expectation(description: "Wait for results")
         
-        controller.performSearch(for: "Garageband", resultType: .software) {
+        controller.performSearch(for: "GarageBand", resultType: .software) {
             e.fulfill()
         }
         wait(for: [e], timeout: 2)
@@ -24,7 +24,7 @@ class SearchResultsControllerTests: XCTestCase {
     }
     
     func testSearchResultController() {
-        let mock = MockDataLoade(data: garageBandJSON, response: nil, error: nil)
+        let mock = MockDataLoader(data: garageBandJSON, response: nil, error: nil)
         let resultsExpectation = expectation(description: "Wait for search results.")
         let controller = SearchResultController(dataLoader: mock)
         
@@ -33,9 +33,22 @@ class SearchResultsControllerTests: XCTestCase {
         }
         
         wait(for: [resultsExpectation], timeout: 2)
-        XCTAssertTrue(controller.searchResults == 2, "Expecting 2 results for GarageBand.")
+        XCTAssertTrue(controller.searchResults.count == 2, "Expecting 2 results for GarageBand.")
         XCTAssertEqual("GarageBand", controller.searchResults[0].title)
         XCTAssertEqual("Apple", controller.searchResults[0].artist)
     }
     
+    func testNoDataWithError() {
+        let e = expectation(description: "There should be no search results.")
+        let error = NSError(domain: "com.LambdaSchool.iTunesSearch", code: -1, userInfo: nil)
+        
+        let mockDataLoader = MockDataLoader(data: nil, response: nil, error: error)
+        let searchResultController = SearchResultController(dataLoader: mockDataLoader)
+        
+        searchResultController.performSearch(for: "Twitter", resultType: .software) {
+            XCTAssertTrue(searchResultController.searchResults.isEmpty)
+            e.fulfill()
+        }
+        waitForExpectations(timeout: 5)
+    }
 }
