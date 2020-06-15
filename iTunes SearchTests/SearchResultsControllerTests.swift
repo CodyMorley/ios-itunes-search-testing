@@ -9,7 +9,7 @@
 import XCTest
 @testable import iTunes_Search
 
-class SearchResultsControllerClass: XCTestCase {
+class SearchResultsControllerTests: XCTestCase {
     
     func testForSomeResults() {
         let controller = SearchResultController()
@@ -21,6 +21,15 @@ class SearchResultsControllerClass: XCTestCase {
         }
         wait(for: [e], timeout: 2)
         XCTAssertTrue(controller.searchResults.count > 0, "Expecting at least one result for Garageband.")
+    }
+    
+    func testSearchResultController() {
+        let mock = MockDataLoade(data: garageBandJSON, response: nil, error: nil)
+        
+        let resultsExpectation = expectation(description: "Wait for search results.")
+        
+        let controller = SearchResultController(dataLoader: )
+        
     }
     
 }
